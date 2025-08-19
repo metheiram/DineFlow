@@ -28,7 +28,7 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="w-80 bg-elegant-700 text-white flex flex-col">
+    <div className="w-80 bg-elegant-800 text-white flex flex-col">
       {/* Header */}
       <div className="p-6 border-b border-elegant-600">
         <div className="flex items-center space-x-3">

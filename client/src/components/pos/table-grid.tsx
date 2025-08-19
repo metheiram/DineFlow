@@ -44,9 +44,9 @@ export default function TableGrid() {
       case "occupied":
         return "table-occupied text-white";
       case "available":
-        return "table-free text-success-800";
+        return "table-free text-white";
       case "reserved":
-        return "table-reserved text-orange-800";
+        return "table-reserved text-white";
       case "cleaning":
         return "bg-elegant-300 text-elegant-700";
       default:
@@ -115,7 +115,7 @@ export default function TableGrid() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-accent-500 rounded-full"></div>
               <span className="text-elegant-600 text-sm">Occupied</span>
             </div>
             <span className="text-elegant-800 font-semibold">
@@ -124,7 +124,7 @@ export default function TableGrid() {
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-success-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-success-500 rounded-full"></div>
               <span className="text-elegant-600 text-sm">Available</span>
             </div>
             <span className="text-elegant-800 font-semibold">
@@ -133,7 +133,7 @@ export default function TableGrid() {
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-orange-400 rounded-full"></div>
+              <div className="w-3 h-3 bg-warning-500 rounded-full"></div>
               <span className="text-elegant-600 text-sm">Reserved</span>
             </div>
             <span className="text-elegant-800 font-semibold">

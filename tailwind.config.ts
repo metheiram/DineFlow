@@ -85,6 +85,18 @@ export default {
           800: "var(--success-800)",
           900: "var(--success-900)",
         },
+        warning: {
+          50: "var(--warning-50)",
+          100: "var(--warning-100)",
+          200: "var(--warning-200)",
+          300: "var(--warning-300)",
+          400: "var(--warning-400)",
+          500: "var(--warning-500)",
+          600: "var(--warning-600)",
+          700: "var(--warning-700)",
+          800: "var(--warning-800)",
+          900: "var(--warning-900)",
+        },
       },
       fontFamily: {
         inter: ['Inter', 'system-ui', 'sans-serif'],

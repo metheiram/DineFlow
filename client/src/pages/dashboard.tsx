@@ -24,16 +24,16 @@ export default function Dashboard() {
       title: "Menu Management",
       description: "Update dishes and prices",
       icon: UtensilsCrossed,
-      iconBg: "bg-success-100",
-      iconColor: "text-success-600",
+      iconBg: "bg-warning-100",
+      iconColor: "text-warning-600",
       onClick: () => {}, // Navigate to menu page
     },
     {
       title: "Daily Report",
       description: "View today's analytics",
       icon: BarChart3,
-      iconBg: "bg-purple-100",
-      iconColor: "text-purple-600",
+      iconBg: "bg-success-100",
+      iconColor: "text-success-600",
       onClick: () => {}, // Navigate to reports page
     },
   ];
