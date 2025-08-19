@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant POS - Restaurant Point of Sale System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'elegant': {
+                            50: '#F7FAFC',
+                            100: '#EDF2F7',
+                            200: '#E2E8F0',
+                            300: '#CBD5E0',
+                            400: '#A0AEC0',
+                            500: '#718096',
+                            600: '#4A5568',
+                            700: '#2D3748',
+                            800: '#1A202C',
+                            900: '#171923',
+                        },
+                        'accent': {
+                            50: '#EBF8FF',
+                            100: '#BEE3F8',
+                            200: '#90CDF4',
+                            300: '#63B3ED',
+                            400: '#4299E1',
+                            500: '#3182CE',
+                            600: '#2B77CB',
+                            700: '#2C5AA0',
+                            800: '#2A4365',
+                            900: '#1A365D',
+                        },
+                        'success': {
+                            50: '#F0FFF4',
+                            100: '#C6F6D5',
+                            200: '#9AE6B4',
+                            300: '#68D391',
+                            400: '#48BB78',
+                            500: '#38A169',
+                            600: '#2F855A',
+                            700: '#276749',
+                            800: '#22543D',
+                            900: '#1C4532',
+                        }
+                    },
+                    boxShadow: {
+                        'neu-sm': 'inset 4px 4px 8px rgba(209, 213, 219, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.8)',
+                        'neu-md': 'inset 6px 6px 12px rgba(209, 213, 219, 0.4), inset -6px -6px 12px rgba(255, 255, 255, 0.9)',
+                        'neu-lg': 'inset 8px 8px 16px rgba(209, 213, 219, 0.5), inset -8px -8px 16px rgba(255, 255, 255, 1)',
+                        'neu-out-sm': '4px 4px 8px rgba(209, 213, 219, 0.4), -4px -4px 8px rgba(255, 255, 255, 0.8)',
+                        'neu-out-md': '6px 6px 12px rgba(209, 213, 219, 0.5), -6px -6px 12px rgba(255, 255, 255, 0.9)',
+                        'neu-out-lg': '8px 8px 16px rgba(209, 213, 219, 0.6), -8px -8px 16px rgba(255, 255, 255, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
+        }
+        
+        .neu-card {
+            background: linear-gradient(145deg, #F7FAFC, #E2E8F0);
+            box-shadow: 8px 8px 16px rgba(209, 213, 219, 0.6), -8px -8px 16px rgba(255, 255, 255, 1);
+            transition: all 0.3s ease;
+        }
+        
+        .neu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 10px 10px 20px rgba(209, 213, 219, 0.7), -10px -10px 20px rgba(255, 255, 255, 1);
+        }
+        
+        .neu-button {
+            background: linear-gradient(145deg, #F7FAFC, #E2E8F0);
+            box-shadow: 6px 6px 12px rgba(209, 213, 219, 0.5), -6px -6px 12px rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .neu-button:hover {
+            box-shadow: 4px 4px 8px rgba(209, 213, 219, 0.6), -4px -4px 8px rgba(255, 255, 255, 1);
+        }
+        
+        .neu-button:active {
+            box-shadow: inset 4px 4px 8px rgba(209, 213, 219, 0.4), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+        
+        .neu-input {
+            background: linear-gradient(145deg, #EDF2F7, #F7FAFC);
+            box-shadow: inset 4px 4px 8px rgba(209, 213, 219, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+        
+        .table-occupied { background: linear-gradient(145deg, #FEB2B2, #FC8181); }
+        .table-free { background: linear-gradient(145deg, #C6F6D5, #9AE6B4); }
+        .table-reserved { background: linear-gradient(145deg, #FEEBC8, #F6AD55); }
+        
+        .slide-enter {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .slide-enter-active {
+            transform: translateX(0);
+            opacity: 1;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-success {
+            animation: pulseSuccess 2s infinite;
+        }
+        
+        @keyframes pulseSuccess {
+            0%, 100% { box-shadow: 0 0 20px rgba(72, 187, 120, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(72, 187, 120, 0.6); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-elegant-50 to-elegant-100 min-h-screen">
+
+    <!-- @COMPONENT: Layout [Main container with sidebar and content area] -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- @COMPONENT: Sidebar [Navigation and branding] -->
+        <div class="w-80 bg-elegant-700 text-white flex flex-col">
+            <!-- @COMPONENT: Header [Brand logo and title] -->
+            <div class="p-6 border-b border-elegant-600">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-accent-400 rounded-xl flex items-center justify-center neu-button">
+                        <i class="fas fa-utensils text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Elegant POS</h1>
+                        <p class="text-elegant-300 text-sm">Restaurant Management</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- @COMPONENT: Navigation [Menu items] -->
+            <nav class="flex-1 p-4 space-y-2">
+                <button class="w-full flex items-center space-x-3 p-4 rounded-xl bg-accent-500 text-white transition-all hover:bg-accent-600 active-nav-item">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span class="font-medium">Dashboard</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-clipboard-list w-5"></i>
+                    <span class="font-medium">Orders</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-hamburger w-5"></i>
+                    <span class="font-medium">Menu</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-chair w-5"></i>
+                    <span class="font-medium">Tables</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-cash-register w-5"></i>
+                    <span class="font-medium">Checkout</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-receipt w-5"></i>
+                    <span class="font-medium">Reports</span>
+                </button>
+                <button class="nav-item w-full flex items-center space-x-3 p-4 rounded-xl text-elegant-300 hover:text-white hover:bg-elegant-600 transition-all">
+                    <i class="fas fa-users w-5"></i>
+                    <span class="font-medium">Staff</span>
+                </button>
+            </nav>
+            
+            <!-- @COMPONENT: UserProfile [Staff info and logout] -->
+            <div class="p-4 border-t border-elegant-600">
+                <div class="flex items-center space-x-3 p-3 rounded-xl bg-elegant-600">
+                    <div class="w-10 h-10 bg-accent-400 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-white" data-bind="staff.name">Sarah Johnson</p>
+                        <p class="text-xs text-elegant-300" data-bind="staff.role">Manager</p>
+                    </div>
+                    <button class="text-elegant-300 hover:text-white transition-colors">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+        
+        <!-- @COMPONENT: MainContent [Dynamic content area] -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- @COMPONENT: TopBar [Page title and quick actions] -->
+            <div class="bg-white border-b border-elegant-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-3xl font-bold text-elegant-800">Dashboard</h2>
+                        <p class="text-elegant-500">Welcome back, manage your restaurant efficiently</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="neu-button px-6 py-3 rounded-xl text-elegant-700 font-medium hover:text-accent-600">
+                            <i class="fas fa-bell mr-2"></i>
+                            Notifications
+                        </button>
+                        <button class="bg-accent-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-accent-600 transition-colors shadow-lg">
+                            <i class="fas fa-plus mr-2"></i>
+                            New Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: TopBar -->
+            
+            <!-- @COMPONENT: DashboardContent [Main dashboard view] -->
+            <div class="flex-1 overflow-auto p-6" id="main-content">
+                
+                <!-- @COMPONENT: StatsCards [Key metrics display] -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="neu-card p-6 rounded-2xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-elegant-500 text-sm font-medium">Today's Sales</p>
+                                <p class="text-3xl font-bold text-elegant-800" data-bind="stats.dailySales">$2,847.50</p>
+                            </div>
+                            <div class="w-12 h-12 bg-success-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-dollar-sign text-success-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <i class="fas fa-arrow-up text-success-600 text-sm"></i>
+                            <span class="text-success-600 text-sm font-medium ml-1">+12.5%</span>
+                            <span class="text-elegant-500 text-sm ml-2">vs yesterday</span>
+                        </div>
+                    </div>
+                    
+                    <div class="neu-card p-6 rounded-2xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-elegant-500 text-sm font-medium">Active Orders</p>
+                                <p class="text-3xl font-bold text-elegant-800" data-bind="stats.activeOrders">18</p>
+                            </div>
+                            <div class="w-12 h-12 bg-accent-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-list text-accent-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <i class="fas fa-clock text-elegant-500 text-sm"></i>
+                            <span class="text-elegant-500 text-sm ml-2">Avg wait: 12 min</span>
+                        </div>
+                    </div>
+                    
+                    <div class="neu-card p-6 rounded-2xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-elegant-500 text-sm font-medium">Table Occupancy</p>
+                                <p class="text-3xl font-bold text-elegant-800" data-bind="stats.occupancy">85%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-chair text-orange-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <i class="fas fa-users text-elegant-500 text-sm"></i>
+                            <span class="text-elegant-500 text-sm ml-2">68 of 80 seats</span>
+                        </div>
+                    </div>
+                    
+                    <div class="neu-card p-6 rounded-2xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-elegant-500 text-sm font-medium">Staff Online</p>
+                                <p class="text-3xl font-bold text-elegant-800" data-bind="stats.staffOnline">12</p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-user-friends text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <span class="w-2 h-2 bg-success-500 rounded-full"></span>
+                            <span class="text-success-600 text-sm font-medium ml-2">All systems active</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: StatsCards -->
+                
+                <!-- @COMPONENT: MainDashboardGrid [Two-column layout for orders and tables] -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- @COMPONENT: ActiveOrdersList [Current orders display] -->
+                    <div class="lg:col-span-2">
+                        <div class="neu-card p-6 rounded-2xl h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold text-elegant-800">Active Orders</h3>
+                                <button class="text-accent-600 hover:text-accent-700 font-medium">View All</button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- @MAP: activeOrders.map(order => ( -->
+                                <div class="bg-white p-4 rounded-xl border border-elegant-200 hover:border-accent-300 transition-all">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center">
+                                                <span class="text-accent-600 font-bold" data-bind="order.tableNumber">T12</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold text-elegant-800" data-bind="order.customerName">Smith Party</p>
+                                                <p class="text-sm text-elegant-500" data-bind="order.time">12:45 PM • 8 min ago</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="px-3 py-1 bg-orange-100 text-orange-600 text-xs font-medium rounded-full">Preparing</span>
+                                            <button class="text-elegant-400 hover:text-elegant-600">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-sm text-elegant-600">
+                                            <span data-bind="order.items.length">3</span> items • 
+                                            <span class="font-semibold" data-bind="order.total">$47.50</span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="px-3 py-1 bg-success-100 text-success-600 text-xs font-medium rounded-lg hover:bg-success-200 transition-colors">
+                                                Complete
+                                            </button>
+                                            <button class="px-3 py-1 bg-elegant-100 text-elegant-600 text-xs font-medium rounded-lg hover:bg-elegant-200 transition-colors">
+                                                Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-4 rounded-xl border border-elegant-200 hover:border-accent-300 transition-all">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
+                                                <span class="text-success-600 font-bold">T08</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold text-elegant-800">Johnson Family</p>
+                                                <p class="text-sm text-elegant-500">1:15 PM • 3 min ago</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="px-3 py-1 bg-success-100 text-success-600 text-xs font-medium rounded-full">Ready</span>
+                                            <button class="text-elegant-400 hover:text-elegant-600">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-sm text-elegant-600">
+                                            5 items • <span class="font-semibold">$89.25</span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="px-3 py-1 bg-accent-100 text-accent-600 text-xs font-medium rounded-lg hover:bg-accent-200 transition-colors">
+                                                Serve
+                                            </button>
+                                            <button class="px-3 py-1 bg-elegant-100 text-elegant-600 text-xs font-medium rounded-lg hover:bg-elegant-200 transition-colors">
+                                                Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-4 rounded-xl border border-elegant-200 hover:border-accent-300 transition-all">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                                <span class="text-red-600 font-bold">T05</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold text-elegant-800">Wilson Group</p>
+                                                <p class="text-sm text-elegant-500">12:30 PM • 23 min ago</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="px-3 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">Delayed</span>
+                                            <button class="text-elegant-400 hover:text-elegant-600">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-sm text-elegant-600">
+                                            4 items • <span class="font-semibold">$62.75</span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="px-3 py-1 bg-orange-100 text-orange-600 text-xs font-medium rounded-lg hover:bg-orange-200 transition-colors">
+                                                Priority
+                                            </button>
+                                            <button class="px-3 py-1 bg-elegant-100 text-elegant-600 text-xs font-medium rounded-lg hover:bg-elegant-200 transition-colors">
+                                                Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: ActiveOrdersList -->
+                    
+                    <!-- @COMPONENT: TableManagement [Table status overview] -->
+                    <div>
+                        <div class="neu-card p-6 rounded-2xl h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold text-elegant-800">Table Status</h3>
+                                <button class="text-accent-600 hover:text-accent-700 font-medium">Manage</button>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-6">
+                                <!-- @MAP: tables.map(table => ( -->
+                                <div class="table-occupied p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-white font-bold mb-1">Table 1</div>
+                                    <div class="text-white text-xs">4 guests</div>
+                                    <div class="text-white text-xs">45 min</div>
+                                </div>
+                                
+                                <div class="table-free p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-success-800 font-bold mb-1">Table 2</div>
+                                    <div class="text-success-700 text-xs">Available</div>
+                                    <div class="text-success-700 text-xs">Clean</div>
+                                </div>
+                                
+                                <div class="table-reserved p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-orange-800 font-bold mb-1">Table 3</div>
+                                    <div class="text-orange-700 text-xs">Reserved</div>
+                                    <div class="text-orange-700 text-xs">2:30 PM</div>
+                                </div>
+                                
+                                <div class="table-occupied p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-white font-bold mb-1">Table 4</div>
+                                    <div class="text-white text-xs">2 guests</div>
+                                    <div class="text-white text-xs">15 min</div>
+                                </div>
+                                
+                                <div class="table-free p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-success-800 font-bold mb-1">Table 5</div>
+                                    <div class="text-success-700 text-xs">Available</div>
+                                    <div class="text-success-700 text-xs">Clean</div>
+                                </div>
+                                
+                                <div class="table-occupied p-3 rounded-xl text-center transition-all hover:scale-105 cursor-pointer">
+                                    <div class="text-white font-bold mb-1">Table 6</div>
+                                    <div class="text-white text-xs">6 guests</div>
+                                    <div class="text-white text-xs">1h 20m</div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                                        <span class="text-elegant-600 text-sm">Occupied</span>
+                                    </div>
+                                    <span class="text-elegant-800 font-semibold">8 tables</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-success-400 rounded-full"></div>
+                                        <span class="text-elegant-600 text-sm">Available</span>
+                                    </div>
+                                    <span class="text-elegant-800 font-semibold">4 tables</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-orange-400 rounded-full"></div>
+                                        <span class="text-elegant-600 text-sm">Reserved</span>
+                                    </div>
+                                    <span class="text-elegant-800 font-semibold">3 tables</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: TableManagement -->
+                </div>
+                <!-- @END_COMPONENT: MainDashboardGrid -->
+                
+                <!-- @COMPONENT: QuickActions [Fast access buttons] -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button class="neu-card p-6 rounded-2xl text-left hover:shadow-neu-out-lg transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-accent-100 rounded-xl flex items-center justify-center group-hover:bg-accent-200 transition-colors">
+                                <i class="fas fa-plus text-accent-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-elegant-800">New Order</h4>
+                                <p class="text-elegant-500 text-sm">Start taking a new order</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button class="neu-card p-6 rounded-2xl text-left hover:shadow-neu-out-lg transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-success-100 rounded-xl flex items-center justify-center group-hover:bg-success-200 transition-colors">
+                                <i class="fas fa-hamburger text-success-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-elegant-800">Menu Management</h4>
+                                <p class="text-elegant-500 text-sm">Update dishes and prices</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button class="neu-card p-6 rounded-2xl text-left hover:shadow-neu-out-lg transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                                <i class="fas fa-chart-bar text-purple-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-elegant-800">Daily Report</h4>
+                                <p class="text-elegant-500 text-sm">View today's analytics</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <!-- @END_COMPONENT: QuickActions -->
+            </div>
+            <!-- @END_COMPONENT: DashboardContent -->
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: Layout -->
+    
+    <!-- @COMPONENT: OrderModal [Order taking interface] -->
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex h-full">
+                <!-- @COMPONENT: MenuCategories [Left sidebar with categories] -->
+                <div class="w-80 bg-elegant-50 border-r border-elegant-200 flex flex-col">
+                    <div class="p-6 border-b border-elegant-200">
+                        <h3 class="text-xl font-bold text-elegant-800">Menu Categories</h3>
+                    </div>
+                    <div class="flex-1 overflow-auto p-4 space-y-2">
+                        <button class="w-full p-4 rounded-xl bg-accent-500 text-white font-medium">
+                            <i class="fas fa-star mr-2"></i>Popular
+                        </button>
+                        <button class="w-full p-4 rounded-xl text-elegant-700 hover:bg-white transition-colors">
+                            <i class="fas fa-bacon mr-2"></i>Appetizers
+                        </button>
+                        <button class="w-full p-4 rounded-xl text-elegant-700 hover:bg-white transition-colors">
+                            <i class="fas fa-drumstick-bite mr-2"></i>Main Courses
+                        </button>
+                        <button class="w-full p-4 rounded-xl text-elegant-700 hover:bg-white transition-colors">
+                            <i class="fas fa-pizza-slice mr-2"></i>Pizza
+                        </button>
+                        <button class="w-full p-4 rounded-xl text-elegant-700 hover:bg-white transition-colors">
+                            <i class="fas fa-glass-martini-alt mr-2"></i>Beverages
+                        </button>
+                        <button class="w-full p-4 rounded-xl text-elegant-700 hover:bg-white transition-colors">
+                            <i class="fas fa-ice-cream mr-2"></i>Desserts
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: MenuCategories -->
+                
+                <!-- @COMPONENT: MenuItems [Center area with menu items] -->
+                <div class="flex-1 flex flex-col">
+                    <div class="p-6 border-b border-elegant-200 flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-elegant-800">Popular Items</h3>
+                        <button class="text-elegant-500 hover:text-elegant-700" onclick="closeOrderModal()">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex-1 overflow-auto p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- A perfectly plated gourmet burger with melted cheese and fresh lettuce -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Gourmet Burger" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Gourmet Beef Burger</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Angus beef patty with aged cheddar, lettuce, tomato</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$16.50</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- A colorful margherita pizza with fresh basil and melted mozzarella -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Margherita Pizza" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Margherita Pizza</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Fresh tomato sauce, mozzarella, basil leaves</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$18.00</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- A fresh garden salad with mixed greens and colorful vegetables -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Caesar Salad" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Caesar Salad</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Crisp romaine, parmesan, croutons, caesar dressing</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$12.50</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- A perfectly grilled salmon fillet with lemon garnish -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Grilled Salmon" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Grilled Salmon</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Atlantic salmon with herbs and lemon butter</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$24.00</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- A rich chocolate dessert with elegant plating -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Chocolate Cake" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Chocolate Lava Cake</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Warm chocolate cake with molten center, vanilla ice cream</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$9.50</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- A refreshing iced beverage with garnish -->
+                            <div class="neu-card p-4 rounded-xl cursor-pointer hover:scale-105 transition-transform" data-mock="true">
+                                <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Iced Coffee" class="w-full h-48 object-cover rounded-lg mb-3" />
+                                <h4 class="font-bold text-elegant-800 mb-1">Artisan Coffee</h4>
+                                <p class="text-elegant-500 text-sm mb-3">Premium espresso blend with steamed milk</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-accent-600">$4.50</span>
+                                    <button class="neu-button px-4 py-2 rounded-lg text-accent-600 font-medium">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: MenuItems -->
+                
+                <!-- @COMPONENT: OrderSummary [Right sidebar with current order] -->
+                <div class="w-96 bg-elegant-50 border-l border-elegant-200 flex flex-col">
+                    <div class="p-6 border-b border-elegant-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-elegant-800">Current Order</h3>
+                            <select class="neu-input px-3 py-2 rounded-lg border-0 text-elegant-700 font-medium">
+                                <option>Table 12</option>
+                                <option>Table 8</option>
+                                <option>Take Away</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 overflow-auto p-6 space-y-4">
+                        <!-- @MAP: orderItems.map(item => ( -->
+                        <div class="bg-white p-4 rounded-xl border border-elegant-200" data-mock="true">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-semibold text-elegant-800">Gourmet Beef Burger</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <button class="neu-button w-8 h-8 rounded-lg flex items-center justify-center text-accent-600 font-bold">-</button>
+                                    <span class="font-medium text-elegant-800">2</span>
+                                    <button class="neu-button w-8 h-8 rounded-lg flex items-center justify-center text-accent-600 font-bold">+</button>
+                                </div>
+                                <span class="font-bold text-accent-600">$33.00</span>
+                            </div>
+                            <p class="text-xs text-elegant-500 mt-2">No modifications</p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-xl border border-elegant-200" data-mock="true">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-semibold text-elegant-800">Caesar Salad</h4>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <button class="neu-button w-8 h-8 rounded-lg flex items-center justify-center text-accent-600 font-bold">-</button>
+                                    <span class="font-medium text-elegant-800">1</span>
+                                    <button class="neu-button w-8 h-8 rounded-lg flex items-center justify-center text-accent-600 font-bold">+</button>
+                                </div>
+                                <span class="font-bold text-accent-600">$12.50</span>
+                            </div>
+                            <p class="text-xs text-elegant-500 mt-2">Extra croutons</p>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                    
+                    <!-- @COMPONENT: OrderTotals [Order summary calculations] -->
+                    <div class="p-6 border-t border-elegant-200">
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Subtotal</span>
+                                <span data-bind="order.subtotal">$45.50</span>
+                            </div>
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Tax (8.25%)</span>
+                                <span data-bind="order.tax">$3.75</span>
+                            </div>
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Service Charge</span>
+                                <span data-bind="order.service">$2.25</span>
+                            </div>
+                            <div class="border-t border-elegant-200 pt-3">
+                                <div class="flex justify-between text-xl font-bold text-elegant-800">
+                                    <span>Total</span>
+                                    <span data-bind="order.total">$51.50</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <button class="w-full bg-accent-500 text-white py-4 rounded-xl font-semibold hover:bg-accent-600 transition-colors">
+                                <i class="fas fa-utensils mr-2"></i>Send to Kitchen
+                            </button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button class="neu-button py-3 rounded-xl text-elegant-700 font-medium">
+                                    <i class="fas fa-save mr-2"></i>Save
+                                </button>
+                                <button class="neu-button py-3 rounded-xl text-elegant-700 font-medium">
+                                    <i class="fas fa-print mr-2"></i>Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: OrderTotals -->
+                </div>
+                <!-- @END_COMPONENT: OrderSummary -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: OrderModal -->
+    
+    <!-- @COMPONENT: CheckoutModal [Payment processing interface] -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-bold text-elegant-800">Checkout</h2>
+                    <button class="text-elegant-500 hover:text-elegant-700" onclick="closeCheckoutModal()">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- @COMPONENT: PaymentMethods [Payment options] -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-elegant-800 mb-4">Payment Method</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="neu-card p-6 rounded-xl text-center hover:shadow-neu-out-md transition-all group payment-method active">
+                            <i class="fas fa-credit-card text-3xl text-accent-600 mb-3 group-hover:text-accent-700"></i>
+                            <p class="font-medium text-elegant-800">Credit Card</p>
+                        </button>
+                        <button class="neu-card p-6 rounded-xl text-center hover:shadow-neu-out-md transition-all group payment-method">
+                            <i class="fas fa-money-bill-wave text-3xl text-success-600 mb-3 group-hover:text-success-700"></i>
+                            <p class="font-medium text-elegant-800">Cash</p>
+                        </button>
+                        <button class="neu-card p-6 rounded-xl text-center hover:shadow-neu-out-md transition-all group payment-method">
+                            <i class="fas fa-mobile-alt text-3xl text-purple-600 mb-3 group-hover:text-purple-700"></i>
+                            <p class="font-medium text-elegant-800">Mobile Pay</p>
+                        </button>
+                        <button class="neu-card p-6 rounded-xl text-center hover:shadow-neu-out-md transition-all group payment-method">
+                            <i class="fas fa-gift text-3xl text-orange-600 mb-3 group-hover:text-orange-700"></i>
+                            <p class="font-medium text-elegant-800">Gift Card</p>
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: PaymentMethods -->
+                
+                <!-- @COMPONENT: OrderSummaryCheckout [Final order review] -->
+                <div class="neu-card p-6 rounded-xl mb-8">
+                    <h3 class="text-lg font-semibold text-elegant-800 mb-4">Order Summary - Table 12</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-elegant-600">
+                            <span>2× Gourmet Beef Burger</span>
+                            <span>$33.00</span>
+                        </div>
+                        <div class="flex justify-between text-elegant-600">
+                            <span>1× Caesar Salad</span>
+                            <span>$12.50</span>
+                        </div>
+                        <div class="border-t border-elegant-200 pt-3 mt-3">
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Subtotal</span>
+                                <span>$45.50</span>
+                            </div>
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Tax (8.25%)</span>
+                                <span>$3.75</span>
+                            </div>
+                            <div class="flex justify-between text-elegant-600">
+                                <span>Service Charge</span>
+                                <span>$2.25</span>
+                            </div>
+                            <div class="flex justify-between text-xl font-bold text-elegant-800 mt-2">
+                                <span>Total</span>
+                                <span>$51.50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: OrderSummaryCheckout -->
+                
+                <!-- @COMPONENT: PaymentActions [Process payment buttons] -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="neu-button py-4 rounded-xl text-elegant-700 font-semibold">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Order
+                    </button>
+                    <button class="bg-success-500 text-white py-4 rounded-xl font-semibold hover:bg-success-600 transition-colors pulse-success">
+                        <i class="fas fa-check mr-2"></i>Process Payment
+                    </button>
+                </div>
+                <!-- @END_COMPONENT: PaymentActions -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: CheckoutModal -->
+    
+    <!-- @COMPONENT: ReceiptModal [Digital receipt display] -->
+    <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-utensils text-accent-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-elegant-800">Elegant Restaurant</h2>
+                    <p class="text-elegant-500">Fine Dining Experience</p>
+                </div>
+                
+                <!-- @COMPONENT: ReceiptDetails [Transaction information] -->
+                <div class="neu-input p-6 rounded-xl mb-6">
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-elegant-500">Receipt #R2024-001247</p>
+                        <p class="text-sm text-elegant-500">Table 12 • Server: Sarah Johnson</p>
+                        <p class="text-sm text-elegant-500">January 15, 2024 • 1:30 PM</p>
+                    </div>
+                    
+                    <div class="border-t border-elegant-200 pt-4">
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>2× Gourmet Beef Burger</span>
+                                <span>$33.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>1× Caesar Salad</span>
+                                <span>$12.50</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-elegant-200 pt-3 mt-4">
+                            <div class="flex justify-between text-sm text-elegant-600">
+                                <span>Subtotal</span>
+                                <span>$45.50</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-elegant-600">
+                                <span>Tax (8.25%)</span>
+                                <span>$3.75</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-elegant-600">
+                                <span>Service Charge</span>
+                                <span>$2.25</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-bold text-elegant-800 mt-2 pt-2 border-t border-elegant-200">
+                                <span>Total</span>
+                                <span>$51.50</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4 pt-4 border-t border-elegant-200">
+                            <p class="text-xs text-elegant-500">Payment Method: Credit Card ****4567</p>
+                            <p class="text-xs text-elegant-500">Status: Paid</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: ReceiptDetails -->
+                
+                <!-- @COMPONENT: ReceiptActions [Print and email options] -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="neu-button py-3 rounded-xl text-elegant-700 font-medium">
+                        <i class="fas fa-print mr-2"></i>Print
+                    </button>
+                    <button class="neu-button py-3 rounded-xl text-elegant-700 font-medium">
+                        <i class="fas fa-envelope mr-2"></i>Email
+                    </button>
+                </div>
+                
+                <button class="w-full mt-4 bg-accent-500 text-white py-3 rounded-xl font-medium hover:bg-accent-600 transition-colors" onclick="closeReceiptModal()">
+                    <i class="fas fa-check mr-2"></i>Done
+                </button>
+                <!-- @END_COMPONENT: ReceiptActions -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: ReceiptModal -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        (function() {
+            'use strict';
+            
+            // Modal Management
+            function openOrderModal() {
+                document.getElementById('orderModal').classList.remove('hidden');
+                document.getElementById('orderModal').classList.add('flex');
+                document.getElementById('orderModal').classList.add('fade-in');
+            }
+            
+            function closeOrderModal() {
+                document.getElementById('orderModal').classList.add('hidden');
+                document.getElementById('orderModal').classList.remove('flex');
+                document.getElementById('orderModal').classList.remove('fade-in');
+            }
+            
+            function openCheckoutModal() {
+                document.getElementById('checkoutModal').classList.remove('hidden');
+                document.getElementById('checkoutModal').classList.add('flex');
+            }
+            
+            function closeCheckoutModal() {
+                document.getElementById('checkoutModal').classList.add('hidden');
+                document.getElementById('checkoutModal').classList.remove('flex');
+            }
+            
+            function openReceiptModal() {
+                document.getElementById('receiptModal').classList.remove('hidden');
+                document.getElementById('receiptModal').classList.add('flex');
+            }
+            
+            function closeReceiptModal() {
+                document.getElementById('receiptModal').classList.add('hidden');
+                document.getElementById('receiptModal').classList.remove('flex');
+            }
+            
+            // Navigation Management
+            function switchView(viewName) {
+                // TODO: Implement view switching logic
+                console.log(`Switching to ${viewName} view`);
+            }
+            
+            // Order Management
+            function addItemToOrder(item) {
+                // TODO: Implement add to order logic
+                console.log('Adding item to order:', item);
+            }
+            
+            function removeItemFromOrder(itemId) {
+                // TODO: Implement remove from order logic
+                console.log('Removing item from order:', itemId);
+            }
+            
+            function updateQuantity(itemId, quantity) {
+                // TODO: Implement quantity update logic
+                console.log(`Updating item ${itemId} quantity to ${quantity}`);
+            }
+            
+            // Payment Processing
+            function processPayment(method, amount) {
+                // TODO: Implement payment processing
+                console.log(`Processing ${method} payment for $${amount}`);
+                closeCheckoutModal();
+                openReceiptModal();
+            }
+            
+            // Event Listeners
+            document.addEventListener('DOMContentLoaded', function() {
+                // Navigation click handlers
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        navItems.forEach(nav => nav.classList.remove('active-nav-item'));
+                        navItems.forEach(nav => nav.classList.add('text-elegant-300'));
+                        navItems.forEach(nav => nav.classList.remove('bg-accent-500', 'text-white'));
+                        
+                        this.classList.add('active-nav-item');
+                        this.classList.remove('text-elegant-300');
+                        this.classList.add('bg-accent-500', 'text-white');
+                        
+                        const viewName = this.textContent.trim().toLowerCase();
+                        switchView(viewName);
+                    });
+                });
+                
+                // Quick action buttons
+                const quickActionButtons = document.querySelectorAll('[class*="neu-card"]:not(.table-)');
+                quickActionButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const buttonText = this.textContent;
+                        if (buttonText.includes('New Order')) {
+                            openOrderModal();
+                        }
+                    });
+                });
+                
+                // Payment method selection
+                const paymentMethods = document.querySelectorAll('.payment-method');
+                paymentMethods.forEach(method => {
+                    method.addEventListener('click', function() {
+                        paymentMethods.forEach(m => m.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+                
+                // Process payment button
+                const processPaymentBtn = document.querySelector('[onclick*="Process Payment"]');
+                if (processPaymentBtn) {
+                    processPaymentBtn.addEventListener('click', function() {
+                        const selectedMethod = document.querySelector('.payment-method.active');
+                        const paymentMethod = selectedMethod ? selectedMethod.textContent.trim() : 'Credit Card';
+                        processPayment(paymentMethod, 51.50);
+                    });
+                }
+            });
+            
+            // Export functions to global scope for onclick handlers
+            window.openOrderModal = openOrderModal;
+            window.closeOrderModal = closeOrderModal;
+            window.openCheckoutModal = openCheckoutModal;
+            window.closeCheckoutModal = closeCheckoutModal;
+            window.openReceiptModal = openReceiptModal;
+            window.closeReceiptModal = closeReceiptModal;
+        })();
+    </script>
+</body>
+</html>
