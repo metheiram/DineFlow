@@ -1,8 +1,8 @@
 # Overview
 
-This is a modern Point of Sale (POS) system for restaurants built as a full-stack web application. The system provides comprehensive restaurant management capabilities including order management, table tracking, menu administration, staff management, and real-time analytics. It features a clean, neumorphic design with a focus on usability for restaurant staff.
+This is a modern Point of Sale (POS) system for restaurants built as a full-stack web application. The system provides comprehensive restaurant management capabilities including order management, table tracking, menu administration, staff management, and real-time analytics. It features a clean, neumorphic design with warm, appetizing colors and a focus on usability for restaurant staff.
 
-The application follows a monorepo structure with a React frontend, Express.js backend, and PostgreSQL database using Drizzle ORM for type-safe database operations.
+The application follows a monorepo structure with a React frontend, Express.js backend, and PostgreSQL database using Drizzle ORM for type-safe database operations. The UI uses a warm, restaurant-friendly color palette with coral/orange accent colors, earthy backgrounds, and soft gray placeholder text for an elegant, professional appearance.
 
 # User Preferences
 
@@ -39,11 +39,13 @@ Preferred communication style: Simple, everyday language.
 - **Security**: Basic credential validation (production would implement proper hashing and JWT)
 
 ## Key Features & Components
-- **Dashboard**: Real-time statistics, active orders overview, and table status
+- **Dashboard**: Real-time statistics, active orders overview, table status with quick actions
 - **Order Management**: Complete order lifecycle from creation to completion
-- **Table Management**: Visual table layout with status tracking
-- **Menu Management**: Dynamic menu with categories and item management
-- **Staff Management**: User account administration
+- **Table Management**: Visual table layout with status tracking and warm color coding
+- **Menu Management**: Full-featured interface with category tabs, search, item cards with images, availability toggle
+- **Checkout System**: Comprehensive payment processing with multiple payment methods and receipt generation
+- **Staff Management**: Complete staff administration with performance tracking, role management, and scheduling
+- **Reports & Analytics**: Detailed sales reports, staff performance analytics, and business insights
 - **Receipt System**: Digital receipt generation and printing capabilities
 
 ## Development Environment

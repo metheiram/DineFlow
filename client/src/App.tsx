@@ -10,6 +10,7 @@ import Menu from "@/pages/menu";
 import Tables from "@/pages/tables";
 import Checkout from "@/pages/checkout";
 import Staff from "@/pages/staff";
+import Reports from "@/pages/reports";
 import LoginForm from "@/components/auth/login-form";
 import Sidebar from "@/components/layout/sidebar";
 import { useAuth } from "@/hooks/use-auth";
@@ -27,6 +28,7 @@ function AuthenticatedApp() {
           <Route path="/tables" component={Tables} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/staff" component={Staff} />
+          <Route path="/reports" component={Reports} />
           <Route component={NotFound} />
         </Switch>
       </div>
